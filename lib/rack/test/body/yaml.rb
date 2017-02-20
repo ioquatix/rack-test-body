@@ -23,19 +23,19 @@ require_relative 'mock_response'
 require 'yaml'
 
 module Rack::Test::Body
-	module YAML
-		def yaml?(content_type = self.content_type)
-			content_type.start_with? "application/yaml"
-		end
-		
-		def parse_text(content_type, content, symbolize_keys: false)
-			if yaml?(content_type)
-				::YAML.load(content)
-			else
-				super
-			end
-		end
-	end
+  module YAML
+    def yaml?(content_type = self.content_type)
+      content_type.start_with? "application/yaml"
+    end
+
+    def parse_text(content_type, content, symbolize_keys: false)
+      if yaml?(content_type)
+        ::YAML.load(content)
+      else
+        super
+      end
+    end
+  end
 end
 
 Rack::MockResponse.prepend(Rack::Test::Body::YAML)

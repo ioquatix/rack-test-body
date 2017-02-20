@@ -23,19 +23,19 @@ require_relative 'mock_response'
 require 'msgpack'
 
 module Rack::Test::Body
-	module MessagePack
-		def msgpack?(content_type = self.content_type)
-			content_type.start_with? "application/msgpack"
-		end
-		
-		def parse_text(content_type, content, symbolize_keys: false)
-			if msgpack?(content_type)
-				::MessagePack.load(content, symbolize_keys: symbolize_keys)
-			else
-				super
-			end
-		end
-	end
+  module MessagePack
+    def msgpack?(content_type = self.content_type)
+      content_type.start_with? "application/msgpack"
+    end
+
+    def parse_text(content_type, content, symbolize_keys: false)
+      if msgpack?(content_type)
+        ::MessagePack.load(content, symbolize_keys: symbolize_keys)
+      else
+        super
+      end
+    end
+  end
 end
 
 Rack::MockResponse.prepend(Rack::Test::Body::MessagePack)
