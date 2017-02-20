@@ -1,17 +1,24 @@
-# Rack::Test::JSON
+# Rack::Test::Body
 
-This tiny gem provides two methods which are useful in RSpec for working with JSON responses.
+Provides extensions to `Rack::MockResponse` for dealing with structured data, including support for JSON, YAML, and MessagePack.
 
 ## Usage
 
-The use cases are trivial:
+Add the following to your `spec_helper.rb` or to the top of your spec:
 
-	require 'rack/test'
-	require 'rack/test/json'
-	
+	# Any combination is fine, but only the ones you load will be supported:
+	require 'rack/test/body/json'
+	require 'rack/test/body/yaml'
+	require 'rack/test/body/msgpack'
+
+In your spec, use `last_response.parsed_body`, `last_response.as_hash` or `last_response.as_array` to interpret the response.
+
 	# ... in spec:
-		expect(last_response).to be_json
-		expect(last_response.as_json['foo']).to be == 'bar'
+	expect(last_response).to be_json
+	expect(last_response.parsed_body['foo']).to be == 'bar'
+	expect(last_response.as_hash[:foo]).to be == 'bar'
+
+The `as_hash` and `as_array` attempt to symbolize the keys of the response body, so that you don't need to worry if the underlying format prefers symbols or strings for keys.
 
 ## Contributing
 
@@ -21,7 +28,7 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/ioquat
 
 Released under the MIT license.
 
-Copyright, 2016, by [Samuel G. D. Williams](http://www.codeotaku.com/samuel-williams).
+Copyright, 2017, by [Samuel G. D. Williams](http://www.codeotaku.com/samuel-williams).
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

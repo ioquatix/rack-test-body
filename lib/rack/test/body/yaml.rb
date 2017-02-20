@@ -18,16 +18,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-require "rack/test/json/version"
+require_relative 'mock_response'
 
-require 'rack/mock'
+require 'yaml'
 
-class Rack::MockResponse
-	def as_json(**options)
-		@json ||= JSON.parse(self.body, **options)
-	end
-	
-	def json?
-		self.content_type.start_with? "application/json"
+module Rack::Test::Body
+	module YAML
+		def yaml?(content_type = self.content_type)
+			content_type.start_with? "application/yaml"
+		end
+		
+		def parse_text(content_type, content, symbolize_keys: false)
+			if yaml?(content_type)
+				::YAML.load(content)
+			else
+				super
+			end
+		end
 	end
 end
+
+Rack::MockResponse.prepend(Rack::Test::Body::YAML)

@@ -18,10 +18,24 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-module Rack
-	module Test
-		module JSON
-			VERSION = "1.1.0"
+require_relative 'mock_response'
+
+require 'json'
+
+module Rack::Test::Body
+	module JSON
+		def json?(content_type = self.content_type)
+			content_type.start_with? "application/json"
+		end
+		
+		def parse_text(content_type, content, symbolize_keys: false)
+			if json?(content_type)
+				::JSON.parse(content, symbolize_names: symbolize_keys)
+			else
+				super
+			end
 		end
 	end
 end
+
+Rack::MockResponse.prepend(Rack::Test::Body::JSON)
