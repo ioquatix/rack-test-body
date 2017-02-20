@@ -6,8 +6,12 @@ This tiny gem provides two methods which are useful in RSpec for working with JS
 
 The use cases are trivial:
 
-	expect(last_response).to be_json
-	expect(last_response.as_json['foo']).to be == 'bar'
+	require 'rack/test'
+	require 'rack/test/json'
+	
+	# ... in spec:
+		expect(last_response).to be_json
+		expect(last_response.as_json['foo']).to be == 'bar'
 
 ## Contributing
 
