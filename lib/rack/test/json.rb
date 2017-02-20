@@ -23,8 +23,8 @@ require "rack/test/json/version"
 require 'rack/mock'
 
 class Rack::MockResponse
-	def as_json
-		@json ||= JSON.parse(self.body)
+	def as_json(**options)
+		@json ||= JSON.parse(self.body, **options)
 	end
 	
 	def json?
