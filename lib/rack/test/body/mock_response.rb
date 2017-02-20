@@ -22,35 +22,35 @@ require 'rack/mock'
 require 'rack/test'
 
 class Rack::MockResponse
-	def parse_text(content_type, content, **options)
-		raise ArgumentError.new("Unsupported content type: #{self.content_type}")
-	end
-	
-	def parsed_body
-		@parsed_body ||= parse_text(self.content_type, self.body)
-	end
-	
-	def as_hash
-		@as_hash ||= as_class(Hash)
-	end
-	
-	def as_array
-		@as_array ||= as_class(Array)
-	end
-	
-	private
-	
-	def parsed_symbolic_body
-		@parsed_symbolic_body ||= parse_text(self.content_type, self.body, symbolize_keys: true)
-	end
-	
-	def as_class(klass)
-		result = parsed_symbolic_body
-		
-		if result.is_a? klass
-			return result
-		else
-			raise TypeError.new("Expected parsed body to be a #{klass}, got #{result.class} instead!")
-		end
-	end
+  def parse_text(content_type, content, **options)
+    raise ArgumentError.new("Unsupported content type: #{self.content_type}")
+  end
+
+  def parsed_body
+    @parsed_body ||= parse_text(self.content_type, self.body)
+  end
+
+  def as_hash
+    @as_hash ||= as_class(Hash)
+  end
+
+  def as_array
+    @as_array ||= as_class(Array)
+  end
+
+  private
+
+  def parsed_symbolic_body
+    @parsed_symbolic_body ||= parse_text(self.content_type, self.body, symbolize_keys: true)
+  end
+
+  def as_class(klass)
+    result = parsed_symbolic_body
+
+    if result.is_a? klass
+      return result
+    else
+      raise TypeError.new("Expected parsed body to be a #{klass}, got #{result.class} instead!")
+    end
+  end
 end

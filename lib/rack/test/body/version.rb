@@ -19,9 +19,9 @@
 # THE SOFTWARE.
 
 module Rack
-	module Test
-		module Body
-			VERSION = "1.0.0"
-		end
-	end
+  module Test
+    module Body
+      VERSION = "1.0.0"
+    end
+  end
 end
